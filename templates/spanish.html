@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-ui.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-exports.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-map.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.2.1/js/anychart-data-adapter.min.js"></script>
+  <script src="https://cdn.anychart.com/geodata/1.2.0/custom/world/world.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+  <link rel="stylesheet" href="https://cdn.anychart.com/releases/8.2.1/css/anychart-ui.min.css" />
+  <link rel="stylesheet" href="https://cdn.anychart.com/releases/8.2.1/fonts/css/anychart-font.min.css" />
+  <style>
+    html, body, #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script type="text/javascript">
+anychart.onDocumentReady(function() {
+  // The data used in this sample can be obtained from the CDN
+  // https://cdn.anychart.com/samples/maps-choropleth/spanish-language-on-world-map/data.json
+  anychart.data.loadJsonFile('https://cdn.anychart.com/samples/maps-choropleth/spanish-language-on-world-map/data.json', function(data) {
+    // define the dataSet
+    var dataSet = anychart.data.set(data);
+
+        var dataSet_lat_long = [
+    {lat: -25.75, long: 122.18},
+    {lat: -18.50, long: 135.24},
+    {lat: -23.12, long: 148.62},
+    {lat: -17.89, long: 145.09},
+    {lat: -33.28, long: 135.58},
+    {lat: -31.21, long: 116.44},
+    {lat: -32.26, long: 151.44},
+    {lat: -25.63, long: 152.37}
+        ];
+
+    // create the map
+    var map = anychart.map();
+
+    // define the geoData
+    map.geoData('anychart.maps.world');
+    var series_lat_long = map.marker(dataSet_lat_long);
+
+    // set the chart title
+    map.title('Countries where Spanish is an Official Language');
+
+    // disable points selection feature
+    map.interactivity().selectionMode('none');
+
+    // creating, enabling and adjusting credits
+    var credits = map.credits();
+    credits.enabled(true);
+    credits.url('https://en.wikipedia.org/wiki/List_of_countries_where_Spanish_is_an_official_language');
+    credits.text('Data source: https://en.wikipedia.org/wiki/List_of_countries_where_Spanish_is_an_official_language');
+    credits.logoSrc('https://en.wikipedia.org/static/favicon/wikipedia.ico');
+
+    // define the series
+    var series = map.choropleth(dataSet);
+
+    // adjust the series
+    series.geoIdField('iso_a2');
+
+    // disable the series labels
+    series.labels(null);
+
+    map.tooltip()
+      .useHtml(true)
+      .title({
+        fontColor: '#7c868e'
+      })
+      .padding([8, 13, 10, 13])
+      .titleFormat(function() {
+        return this.name
+      })
+      .format(function() {
+        var span_for_value = '<span style="color: #545f69; font-size: 12px; font-weight: bold">';
+        var span_for_description = '<br/><span style="color: #545f69; font-size: 10px">';
+        var result = span_for_value + this.value + '</span></strong>';
+        if (getDescription(this.id) != undefined && getDescription(this.id) != '')
+          return result + span_for_description + getDescription(this.id) + '</span></strong>';
+        return result;
+      });
+    map.tooltip().background()
+      .enabled(true)
+      .fill('#fff')
+      .stroke('#c1c1c1')
+      .corners(3)
+      .cornerType('round');
+
+    // create zoom controls
+    var zoomController = anychart.ui.zoom();
+    zoomController.render(map);
+
+    // set container id for the chart
+    map.container('container');
+    // initiate chart drawing
+    map.draw();
+
+    // create a function for description
+    function getDescription(id) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id == id) return data[i].description
+      }
+    }
+  });
+});
+    </script>
+</body>
+</html>
+
+                
