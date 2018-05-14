@@ -1,0 +1,41 @@
+.section {
+    padding: 100px 0;
+}
+
+.person{
+	text-align: center;
+	
+}
+
+.person img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	margin: auto;
+	text-align: center;
+}
+
+.person h5 {
+	color: #00aeda;
+	font-size: 13px;
+	font-weight: 400;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+	margin-top: 10px;
+	line-height: 1.1;
+}
+
+.person h4 {
+	font-weight: 400;
+
+}
+
+h4{
+	font-size: 22px;
+	color: #2d3033;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-family: inherit;
+	line-height: 1.1;
+
+}
